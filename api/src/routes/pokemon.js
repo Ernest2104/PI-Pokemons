@@ -11,8 +11,8 @@ const getApiInfo = async () => {
     }
 
     const apiInfo = await Promise.all(arrayPokemons)// Promise -> retorna un promesa cuando todas las promesas del argumento concluyeron
-    .then( pokemon => {
-        const apiPokes = pokemon.map( poke => {
+    .then(pokemon => {
+        const apiPokes = pokemon.map(poke => {
             return {
                 id: poke.data.id,
                 name: poke.data.name,
@@ -51,25 +51,61 @@ const getAllPokemons = async () => {
     return infoTotal;
 };
 
-// GET /pokemons + GET /pokemons?name="..."
-router.get('/', async (req, res) => {
+// GET /pokemons + GET /pokemons?name="..." -> async/await
+// router.get('/', async (req, res) => {
+//     const name = req.query.name
+//     try {
+//         const pokemonsTotal = await getAllPokemons();
+//         if (name) {
+//             const pokemonName = pokemonsTotal.filter(p => p.name.toLowerCase().includes(name.toLowerCase()));
+//             pokemonName.length ? res.status(200).send(pokemonName) : res.status(404).send('Pokemon no encontrado!');
+//         } else {
+//             res.status(200).send(pokemonsTotal);
+//         }
+//     } catch(error) {
+//         res.status(500).send(error);
+//     }
+// });
+
+// GET /pokemons + GET /pokemons?name="..." -> promise
+router.get('/', (req, res) => {
     const name = req.query.name
-    try {
-        const pokemonsTotal = await getAllPokemons();
+    getAllPokemons()
+    .then(pokemonsTotal => {
         if (name) {
             const pokemonName = pokemonsTotal.filter(p => p.name.toLowerCase().includes(name.toLowerCase()));
             pokemonName.length ? res.status(200).send(pokemonName) : res.status(404).send('Pokemon no encontrado!');
         } else {
             res.status(200).send(pokemonsTotal);
         }
-    } catch(error) {
-        res.status(500).send(error);
-    }
+    })
 });
-// POST /pokemons
-router.post('/', async (req, res) => {
+
+// POST /pokemons -> async/await 
+// router.post('/', async (req, res) => {
+//     const { name, hp, attack, defense, speed, weight, height, sprite, type, createInDb } = req.body;
+//     const pokemonCreated = await Pokemon.create ({
+//         name,
+//         hp,
+//         attack,
+//         defense,
+//         speed,
+//         weight,
+//         height,
+//         sprite,
+//         createInDb
+//     })
+//     const typesDb = await Type.findAll({
+//         where: { name: type }
+//     });
+//     pokemonCreated.addType(typesDb);
+//     res.status(200).send('Pokemon creado con éxito!')
+// });
+
+// POST /pokemons -> promise
+router.post('/', (req, res) => {
     const { name, hp, attack, defense, speed, weight, height, sprite, type, createInDb } = req.body;
-    const pokemonCreated = await Pokemon.create ({
+    Pokemon.create ({
         name,
         hp,
         attack,
@@ -80,21 +116,35 @@ router.post('/', async (req, res) => {
         sprite,
         createInDb
     })
-    const typesDb = await Type.findAll({
-        where: { name: type }
-    });
-    pokemonCreated.addType(typesDb);
-    res.status(200).send('Pokemon creado con éxito!')
+    .then(pokemon => {
+    Type.findAll({
+            where: { name: type }
+        })
+        .then(typesDb => pokemon.addType(typesDb))
+        .then(() => res.status(200).send('Pokemon creado con éxito!'))
+    })
 });
 
-// GET /pokemons/{idPokemon}
-router.get('/:id', async (req, res) => {
+// GET /pokemons/{idPokemon} -> async/await
+// router.get('/:id', async (req, res) => {
+//     const { id } = req.params;
+//     const pokemonTotal = await getAllPokemons();
+//     if (id) {
+//         const pokemonId = pokemonTotal.filter(p => p.id == id);
+//         pokemonId.length ? res.status(200).json(pokemonId) : res.status(404).send('Pokemon no encontrado!');
+//     }
+// });
+
+// GET /pokemons/{idPokemon} -> promise
+router.get('/:id', (req, res) => {
     const { id } = req.params;
-    const pokemonTotal = await getAllPokemons();
-    if (id) {
-        const pokemonId = pokemonTotal.filter(p => p.id == id);
-        pokemonId.length ? res.status(200).json(pokemonId) : res.status(404).send('Pokemon no encontrado');
-    }
+    getAllPokemons()
+    .then((pokemon) => {
+        if (id) {
+            const pokemonId = pokemon.filter(p => p.id == id);
+            pokemonId.length ? res.status(200).json(pokemonId) : res.status(404).send('Pokemon no encontrado!');
+        }
+    })
 });
 
 module.exports = router;
