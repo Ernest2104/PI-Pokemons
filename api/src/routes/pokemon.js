@@ -15,7 +15,7 @@ const getApiInfo = async () => {
         const apiPokes = pokemon.map(poke => {
             return {
                 id: poke.data.id,
-                name: poke.data.name,
+                name: poke.data.name.charAt(0).toUpperCase() + poke.data.name.slice(1),
                 hp: poke.data.stats[0].base_stat,
                 attack: poke.data.stats[1].base_stat,
                 defense: poke.data.stats[2].base_stat,
@@ -23,7 +23,7 @@ const getApiInfo = async () => {
                 weight: poke.data.weight,
                 height: poke.data.height,
                 sprite: poke.data.sprites.other.dream_world.front_default,
-                types: poke.data.types.map(t => t.type.name)
+                types: poke.data.types.map(t => t.type.name.charAt(0).toUpperCase() + t.type.name.slice(1))
             }
         })
         return apiPokes;
@@ -32,7 +32,8 @@ const getApiInfo = async () => {
 };
 // pokemones de la base de datos
 const getDbInfo = async () => {
-    return await Pokemon.findAll({
+    return (
+        await Pokemon.findAll({
         include:{
             model: Type,
             attributes: ['name'],
@@ -40,8 +41,18 @@ const getDbInfo = async () => {
                 attributes: [],
             }
         }
-    })
+        })
+    )
+    // .map(p => {
+    //     const data = p.toJSON();
+    //     console.log(data)
+    //     return {
+    //       ...data,
+    //       types: data.types.map(t => t.name),
+    //     };
+    //   });
 };
+
 
 // pokemones de la base de datos + pokemones de la API
 const getAllPokemons = async () => {
@@ -118,7 +129,7 @@ router.post('/', (req, res) => {
     })
     .then(pokemon => {
     Type.findAll({
-            where: { name: type }
+            where: { name : type }
         })
         .then(typesDb => pokemon.addType(typesDb))
         .then(() => res.status(200).send('Pokemon creado con éxito!'))

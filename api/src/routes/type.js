@@ -19,7 +19,7 @@ const axios = require('axios');
 // GET /types -> promises
 router.get('/', (req, res) => {
     axios.get(`https://pokeapi.co/api/v2/type`)
-    .then(typeApi => typeApi.data.results.map(t => t.name))
+    .then(typeApi => typeApi.data.results.map(t => t.name.charAt(0).toUpperCase() + t.name.slice(1)))
     .then(types => types.forEach(t => {
         Type.findOrCreate({
             where: { name: t }
