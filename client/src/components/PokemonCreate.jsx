@@ -7,9 +7,27 @@ const validateInput = (input) => {
     let errors = {};
     if (!input.name) {
         errors.name = 'Se requiere un nombre';
-    } else if (!input.hp) {
+    } 
+    else if (/^([0-9])*$/.test(input.name)){
+        errors.name = 'Solo caracteres!!'
+    }
+
+    if (!input.hp) {
         errors.hp = 'Se requiere puntos de vida'
     }
+
+    if (!/^[0-9]+([.])?([0-9]+)?$/.test(input.weight)){
+        errors.weight = 'Solo números!!'
+    }
+    else if(input.weight < 0 || input.weight > 100)
+        errors.weight = 'Valor debe estar entre 0 y 100 kgs.!!'
+    
+    if (!/^[0-9]+([.])?([0-9]+)?$/.test(input.weight)){
+        errors.weight = 'Solo números!!'
+    }
+    else if(input.height < 0 || input.weight > 20)
+        errors.weight = 'Valor debe estar entre 0 y 20 mts.!!'
+
     return errors;
 }
 
@@ -87,18 +105,20 @@ const PokemonCreate = () => {
                     <input type="text" value={input.name} name="name" onChange={handleChange}/><br/><br/>
                     {errors.name && <p>{errors.name}</p>}
                     <label>Puntos de vida (hp): </label>
-                    <input type="number" value={input.hp} name="hp" onChange={handleChange}/><br/><br/>
+                    <input type="range" min="0" max="255" step="10" value={input.hp} name="hp" onChange={handleChange}/>{input.hp}<br/><br/>
                     {errors.hp && <p>{errors.hp}</p>}
                     <label>Fuerza: </label>
-                    <input type="number" value={input.attack} name="attack" onChange={handleChange}/><br/><br/>
+                    <input type="range" min="0" max="255" step="10" value={input.attack} name="attack" onChange={handleChange}/>{input.attack}<br/><br/>
                     <label>Defenza: </label>
-                    <input type="number" value={input.defense} name="defense" onChange={handleChange}/><br/><br/>
+                    <input type="range" min="0" max="255" step="10" value={input.defense} name="defense" onChange={handleChange}/>{input.defense}<br/><br/>
                     <label>Velocidad: </label>
-                    <input type="number" value={input.speed} name="speed" onChange={handleChange}/><br/><br/>
+                    <input type="range" min="0" max="255" step="10" value={input.speed} name="speed" onChange={handleChange}/>{input.speed}<br/><br/>
                     <label>Peso: </label>
-                    <input type="number" value={input.weight} name="weight" onChange={handleChange}/><br/><br/>
+                    <input type="text" value={input.weight} name="weight" onChange={handleChange}/><br/><br/>
+                    {errors.weight && <p>{errors.weight}</p>}
                     <label>Altura: </label>
-                    <input type="number" value={input.height} name="height" onChange={handleChange}/><br/><br/>
+                    <input type="text" value={input.height} name="height" onChange={handleChange}/><br/><br/>
+                    {errors.height && <p>{errors.height}</p>}
                     <label>Imagen: </label>
                     <input type="text" value={input.sprite} name="sprite" onChange={handleChange}/><br/><br/>
                     <label>Tipos: </label>
@@ -108,7 +128,13 @@ const PokemonCreate = () => {
                         ))}
                     </select><br/><br/>
                     {/*<ul><li>{input.type.map(t => t + ', ')}</li></ul>*/}
-                    <button type="submit">Crear pokemon</button>
+                    <button 
+                        type="submit"
+                        disabled={
+                            !input.name || !input.hp || !input.attack || !input.defense ? true : false
+                        }>
+                        Crear pokemon
+                    </button>
                 </div>
             </form>
             {input.type.map(t => 

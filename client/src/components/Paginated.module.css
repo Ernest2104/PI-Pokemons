@@ -38,6 +38,7 @@
     color:antiquewhite;
     border-radius: 1px;
     font-weight: bold;
+    cursor: pointer;
 }
 
 .nav_li:hover{
@@ -55,4 +56,5 @@
     color:rgb(58, 58, 59);
     border-radius: 1px;
     font-weight: bold;
+    cursor: pointer;
 }
