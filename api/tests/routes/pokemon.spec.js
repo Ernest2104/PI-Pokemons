@@ -9,16 +9,38 @@ const pokemon = {
   name: 'Pikachu',
 };
 
-describe('Pokemon routes', () => {
+xdescribe('Pokemon routes', () => {
   before(() => conn.authenticate()
   .catch((err) => {
     console.error('Unable to connect to the database:', err);
   }));
   beforeEach(() => Pokemon.sync({ force: true })
     .then(() => Pokemon.create(pokemon)));
-  describe('GET /pokemons', () => {
-    it('should get 200', () =>
+  xdescribe('GET /pokemons', () => {
+    xit('should get 200', () =>
       agent.get('/pokemons').expect(200)
     );
   });
 });
+  
+xdescribe('POST /pokemons', () => {
+  xit("POST agrega un nuevo Pokemon",  () => {
+    agent.post('/pokemons')
+    .send({ name: 'Pikachu' })
+    .expect(200)
+    .then((res) => {
+      expect(res.body).to.eql('Pikachu');
+    })
+  })
+});
+
+xdescribe('pokemons/:id', () => {
+  xit('GET responde con el personaje encontrado x id', () => {
+      agent.get('pokemons/1')
+      .expect(200)
+      .expect("Content-Type", /json/)
+      .expect((res) => {
+        expect(res.body).to.eql('Pikachu');
+      });
+  });
+})

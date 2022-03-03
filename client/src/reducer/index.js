@@ -1,10 +1,11 @@
-import {GET_POKEMONS, ORDER, FILTER_BY_TYPE, CLEAN_DETAIL_POKEMON, FILTER_CREATED, GET_DETAIL_POKEMON, GET_NAME_POKEMONS, GET_TYPES} from '../actions/index'
+import {GET_POKEMONS, ORDER, FILTER_BY_TYPE, CLEAN_DETAIL_POKEMON, FILTER_CREATED, GET_DETAIL_POKEMON, GET_NAME_POKEMONS, GET_TYPES, CLEAN_POKEMONS, CLEAN_TYPES_POKEMON} from '../actions/index'
 
 const initialState = {
     pokemons: [],
     allPokemons: [],
     types: [],
-    detail: []
+    detail: [],
+    message: {}
 }
 
 const rootReducer = (state = initialState, action) => {
@@ -15,12 +16,24 @@ const rootReducer = (state = initialState, action) => {
                 pokemons: action.payload,
                 allPokemons: action.payload
             }
+        
+        case CLEAN_POKEMONS:
+            return {
+                ...state,
+                pokemons:[]
+            }
 
         case GET_TYPES:
             return {
                 ...state,
-                types: action.payload
+                types: action.payload,
             }
+        
+        case CLEAN_TYPES_POKEMON:
+            return {
+                ...state,
+                types:[]
+            } 
         
         case GET_NAME_POKEMONS:
             return {
@@ -47,19 +60,34 @@ const rootReducer = (state = initialState, action) => {
 
         case FILTER_BY_TYPE:
             const allPokemons = state.allPokemons;
-            const typefiltered = allPokemons.filter(p => typeof p.types[0] !== 'object' ? p.types.includes(action.payload) : p.types.some(t => t.name.includes(action.payload)));
-            //const typefiltered = allPokemons.filter(p => p.types.includes(action.payload));
+            //let typeFiltered = []
+            // console.log(allPokemons)
+            // console.log(action.payload)
+            const typeFiltered = action.payload === 'All' ? state.allPokemons : allPokemons.filter(p => typeof p.types[0] !== 'object' ? p.types.includes(action.payload) : p.types.some(t => t.name.includes(action.payload)));
+            //typeFiltered = action.payload === 'All' ? state.allPokemons : allPokemons.filter(p => p.types && p.types.includes(action.payload));
+            // console.log(typeFiltered)
+            // console.log(typeFiltered.length)
             return {
                 ...state,
-                pokemons: typefiltered
+                message: !(typeFiltered.length > 0) && alert('No existes pokemomes de ese tipo!!'),
+                pokemons: typeFiltered.length > 0 ? typeFiltered : state.allPokemons,
+                
             }
 
         case FILTER_CREATED:
             const allPokemons2 = state.allPokemons;
-            const createdfiltered = action.payload === 'created' ?  allPokemons2.filter(p => p.createInDb) : allPokemons2.filter(p => !p.createInDb)
+            let createdFiltered = [];
+            if (action.payload === 'all') {
+                createdFiltered = state.allPokemons
+            } else if (action.payload === 'created') {
+                createdFiltered = allPokemons2.filter(p => p.createInDb)
+            } else createdFiltered = allPokemons2.filter(p => !p.createInDb)
+            //console.log(createdFiltered)
+            
             return {
                 ...state,
-                pokemons: action.payload === 'all' ? state.allPokemons : createdfiltered
+                message: !(createdFiltered.length > 0) && alert('No existes pokemomes en la base de datos!!!'),
+                pokemons: createdFiltered.length > 0 ? createdFiltered : state.allPokemons
             }
 
         case ORDER:

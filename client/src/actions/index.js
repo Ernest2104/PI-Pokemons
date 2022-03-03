@@ -7,6 +7,8 @@ export const CLEAN_DETAIL_POKEMON = 'CLEAN_DETAIL_POKEMON';
 export const FILTER_BY_TYPE = 'FILTER_BY_TYPE';
 export const FILTER_CREATED = 'FILTER_CREATED';
 export const ORDER = 'ORDER';
+export const CLEAN_POKEMONS = 'CLEAN_POKEMONS';
+export const CLEAN_TYPES_POKEMON = 'CLEAN_TYPES_POKEMON';
 
 export const getPokemons = () => {
     return async (dispatch) => {
@@ -15,6 +17,12 @@ export const getPokemons = () => {
             type: 'GET_POKEMONS',
             payload: json.data
         })
+    }
+}
+
+export const cleanPokemons = () => {
+    return {
+        type: 'CLEAN_POKEMONS'
     }
 }
 
@@ -28,6 +36,12 @@ export const getTypes = () => {
     }
 }
 
+export const cleanTypesPokemon = () => {
+    return {
+        type: 'CLEAN_TYPES_POKEMON'
+    }
+}
+
 export const getNamePokemons = (name) => {
     return async (dispatch) => {
         try {
@@ -38,7 +52,7 @@ export const getNamePokemons = (name) => {
             })
         }
         catch (error) {
-            alert('Pokemon no encontrado!!')
+            alert('Pokémon no encontrado!!!')
         }
     }
 }
@@ -72,7 +86,6 @@ export const postPokemon = (payload) => {
 }
 
 export const filterPokemonsByType = (payload) => {
-    console.log(payload)
     return {
         type: 'FILTER_BY_TYPE',
         payload
@@ -80,7 +93,7 @@ export const filterPokemonsByType = (payload) => {
 }
 
 export const filterCreated = (payload) => {
-    console.log(payload)
+    
     return {
         type: 'FILTER_CREATED',
         payload

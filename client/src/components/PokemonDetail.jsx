@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getDetailPokemon, cleanDetailPokemon } from "../actions";
 import styled from "styled-components";
+import pikachu from '../../src/pikachu2.gif'
 
 const Card = styled.div`
     height: fit-content;
@@ -59,13 +60,16 @@ const Card = styled.div`
     }
 `
 const Button = styled.button`
+    font-family: 'Roboto Mono', monospace;
+    font-size: 16px;
     border-radius: 5px;
-    color:antiquewhite;
+    color:black;
     padding:10px 20px;
-    background-color:#FF9800;
+    background-color:lightgrey;
     display:inline-block;
+    cursor: pointer;
     :hover {
-        background-color:#333333;
+        background-color:grey;
     }
 `
 const PokemonDetail = () => {
@@ -99,8 +103,9 @@ const PokemonDetail = () => {
                     <h3>Velocidad: {myPokemon[0].speed}</h3>
                     <h3>Altura: {myPokemon[0].height}</h3>
                     <h3>Peso: {myPokemon[0].weight}</h3>
-                </Card> : <h2>Cargando...</h2>
+                </Card> : <img src={pikachu} style={{height:300 }} alt="loading..." />
             }
+            <br/>
             <Link to='/home'>
                 <Button>Home</Button>
             </Link>

@@ -2,6 +2,7 @@ const { Router } = require('express');
 const { Pokemon, Type } = require('../db');
 const router = Router();
 const axios = require('axios');
+const { response } = require('../app');
 
 // pokemones de la API
 const getApiInfo = async () => {
@@ -54,7 +55,7 @@ const getDbInfo = async () => {
 };
 
 
-// pokemones de la base de datos + pokemones de la API
+//pokemones de la base de datos + pokemones de la API
 const getAllPokemons = async () => {
     const apiInfo = await getApiInfo();
     const dbInfo = await getDbInfo();
@@ -62,6 +63,14 @@ const getAllPokemons = async () => {
     return infoTotal;
 };
 
+// const getAllPokemons = () => {
+//     getApiInfo()
+//    .then(apiInfo => {
+//         return apiInfo.json()
+//     //return info;
+// })
+
+//}
 // GET /pokemons + GET /pokemons?name="..." -> async/await
 // router.get('/', async (req, res) => {
 //     const name = req.query.name
@@ -84,8 +93,8 @@ router.get('/', (req, res) => {
     getAllPokemons()
     .then(pokemonsTotal => {
         if (name) {
-            const pokemonName = pokemonsTotal.filter(p => p.name.toLowerCase().includes(name.toLowerCase()));
-            pokemonName.length ? res.status(200).send(pokemonName) : res.status(404).send('Pokemon no encontrado!');
+            const pokemonName = pokemonsTotal.filter(p => p.name.toLowerCase() === name.toLowerCase());
+            pokemonName.length ? res.status(200).send(pokemonName) : res.status(404).send('Pokemon no encontrado!!');
         } else {
             res.status(200).send(pokemonsTotal);
         }

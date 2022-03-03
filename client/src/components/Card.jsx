@@ -3,7 +3,7 @@ import React from "react";
 import styled from 'styled-components';
 
 const Body = styled.body`
-    margin: 15px;
+    margin: 5px 15px;
     padding: 0px;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     //float: left;
@@ -14,7 +14,7 @@ const CardContainer = styled.div`
     background: linear-gradient(to right, #fad61f, #fad61f);
     width: 250px;
     height: auto;
-    margin: 5%;
+    margin: 5px;
     padding: 10px;
     border-radius: 10px;
     box-shadow: 0px 0px 10px black;

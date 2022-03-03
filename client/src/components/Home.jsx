@@ -1,22 +1,26 @@
 import React from "react";
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getPokemons, getTypes, filterPokemonsByType, filterCreated, order } from '../actions';
+import { getPokemons, getTypes, filterPokemonsByType, filterCreated, order, cleanPokemons } from '../actions';
 import { Link } from 'react-router-dom';
 import styled from "styled-components";
 import Card from "./Card";
 import Paginated from "./Paginated";
 import SearchBar from "./SearchBar";
-import fondo from '../../src/rEWUdzp.jpeg';
+import fondo from '../../src/yCKv80D.jpeg';
 import logo from '../pngwing.com.png'
+import pikachu from '../../src/pikachu2.gif'
 
 const Body = styled.body`
     background: linear-gradient(to right, #FDC830, #F37335);
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    min-height: 96vh;
+    font-family:'Roboto Mono', monospace;
+
+    //font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     
 `
 const Menu = styled.div`
-    height: 250px;
+    height: 200px;
     background-image: url(${fondo});
     position: sticky;
     top: 0;
@@ -24,32 +28,108 @@ const Menu = styled.div`
 
     img {
         width: 350px;
+        margin-top: 10px;
         margin-left: auto;
         margin-right: auto;
+        
         display: block;
     }
- 
+`
+const MenuCrear = styled.div`
+    position: fixed;
+    top: 15px; 
+    right: 60px;
+    height: 185px;
+    width: 220px;
+    font-family: Arial, Helvetica, sans-serif;
+    border: 3px outset lightgray;
+    border-radius: 10px;
+    display: inline;
+    button {
+        margin: 10px;
+        width: 180px;
+        height: 40px;
+        font-size: 16px;
+        border-radius: 5px;
+        
+        color:black;
+        padding:12px 20px;
+        background-color:lightgray;
+        display:inline-block;
+        cursor: pointer;
+        :hover {
+            background-color:grey;
+        }
 
+    }
 `
 const Order = styled.div`
-    border: 1px solid black;
+    font-family: Arial, Helvetica, sans-serif;
+    font-style: italic;
+    //border: 3px outset lightgray;
     position: fixed;
-    top: 10px; 
-    right: 20px;
-    background-color: lightblue;
+    top: 50px; 
+    left: 310px;
+    height: 190px;
+    width: 280px;
+    p {
+        font-size: 17px;
+    }
+    input {
+        //padding: 10px;
+        margin-left: 20px;
+    }
+
+    fieldset {
+        font-size: 14px;
+        font-style: normal;
+        border-radius: 5px;
+        border-color: lightgoldenrodyellow;
+        margin: 10px;
+    }
+    legend {
+        font-size: 14px;
+        font-weight: bold;
+    }
 `
 const Filter = styled.div`
-    border: 1px solid black;
+    font-family: Arial, Helvetica, sans-serif;
+    font-style: italic;
+    //border: 3px outset lightgray;
+    border-radius: 10px;
     position: fixed;
-    top: 10px; 
+    top: 60px; 
     left: 20px;
-    background-color: lightgray;
-`
+    height: 190px;
+    width: 280px;
 
+    p {
+        font-size: 17px;
+    }
+    fieldset {
+        border-radius: 5px;
+        border-color: lightgoldenrodyellow;
+        
+    }
+    legend {
+        font-size: 14px;
+        font-style: normal;
+        font-weight: bold;
+    }
+    select {
+        background: beige;
+        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        font-weight: bold;
+        height: 29px;
+        overflow: hidden;
+        width: 220px;
+    }
+`
 export default function Home() {
     const dispatch = useDispatch();
     const allPokemons = useSelector(state => state.pokemons);
     const allTypes = useSelector(state => state.types);
+    const message = useSelector(state => state.message);
     const [orden, setOrden] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [pokemonsPerPage, setPokemonsPerPage] = useState(12);
@@ -63,6 +143,9 @@ export default function Home() {
 
     useEffect(() => {
         dispatch(getPokemons())
+        return () => {
+            dispatch(cleanPokemons())
+        }
     }, [dispatch])
 
     useEffect(() => {
@@ -79,7 +162,7 @@ export default function Home() {
         if (currentPage !== 1)
         setCurrentPage(currentPage - 1)
     }
-
+    //console.log(allPokemons)
     const handleNextBtn = () => {
         if (currentPage !== Math.ceil(allPokemons.length / pokemonsPerPage)) {
             setCurrentPage(currentPage + 1)
@@ -89,70 +172,99 @@ export default function Home() {
     const handleFilterType = (e) => {
         e.preventDefault();
         dispatch(filterPokemonsByType(e.target.value))
+        
+        console.log(message)
+        // if (message === false) {
+        document.getElementById('selectTipos').value = 'All'
+        // }
+        return message;
     }
 
     const handleFilterCreated = (e) => {
         e.preventDefault();
         dispatch(filterCreated(e.target.value))
+        console.log(message)
+        if (message !== undefined) {
+            document.getElementById('selectCreados').value = 'all'
+        }
+        return message;
+    }
+
+    const resetFilters = () => {
+        document.getElementById('nameDesc').checked = false
+        document.getElementById('nameAsc').checked = false
+        document.getElementById('attackDesc').checked = false
+        document.getElementById('attackAsc').checked = false
+        document.getElementById('selectCreados').value = 'all'
+        document.getElementById('selectTipos').value = 'All'
+        dispatch(getPokemons());
     }
 
     const handleOrder = (e) => {
         dispatch(order(e.target.value));
         setCurrentPage(1);
         setOrden(`Ordenado ${e.target.value}`);
+        
     }
 
     return (
     <Body>
         <div>
             <Menu>
-                <Link to='/pokemon'>Crear Pokemon</Link>
-                {/*<h1>POKEMONS</h1>*/}
+                <MenuCrear>
+                    <Link to='/pokemon'><button>Crear Pokemon</button></Link>
+                    <button onClick={e => handleClick(e)}>Cargar Todos</button>
+                    <button onClick={resetFilters}>Limpiar Filtros</button>
+                </MenuCrear>
                 <img src={logo} alt="img" />
-                <button onClick={e => handleClick(e)}>Volver a cargar todos los pokemones</button>
-        
+                
                 <Order>
-                <h3>Ordenamiento</h3>
+                {/*<p>Ordenamiento</p>*/}
                 <fieldset onChange={(e) => handleOrder(e)}>
-                    {/*<optgroup label="Nombre">*/}
-                    <legend>Orden x Nombre</legend>
+                    <legend>Nombre</legend>
                     <label>
-                        <input type='radio' value='asc_name' name='name'/>Ascendente
+                        <input id='nameAsc' type='radio' value='asc_name' name='name'/>A-Z
                     </label>
                     <label>
-                        <input type='radio' value='desc_name' name='name'/>Descendente
+                        <input id='nameDesc' type='radio' value='desc_name' name='name'/>Z-A
                     </label>
                 </fieldset>
                 <fieldset onChange={(e) => handleOrder(e)}>
-                    {/*</optgroup>*/}
-                    {/*<optgroup label="Fuerza">*/}
-                    <legend>Orden x Fuerza</legend>
+                    <legend>Fuerza💪</legend>
                     <label>
-                        <input type='radio' value='asc_attack' name='attack'/>Ascendente
+                        <input id='attackAsc' type='radio' value='asc_attack' name='attack'/>Menos Fuerte
                     </label>
                     <label>
-                        <input type='radio' value='desc_attack' name='attack'/>Descendente
+                        <input id='attackDesc' type='radio' value='desc_attack' name='attack'/>Mas Fuerte
                     </label>
-                    {/*</optgroup>*/}
                 </fieldset>
                 </Order>
 
                 <Filter>
-                <h3>Filtros</h3>
-                <select onChange={e => handleFilterType(e)}>
-                    { allTypes && allTypes.map(t => {
+                {/*<p>Filtros</p>*/}
+                <fieldset>
+                <legend>Tipos:</legend>
+                <select id='selectTipos' onChange={e => handleFilterType(e)}>
+                    {allTypes && allTypes.map(t => {
                         return (
+                            <>
                             <option value={t.name} key={t.id}>
                                 {t.name}
                             </option>
+                            
+                            </>
                         )
                     })}
                 </select>
-                    <select onChange={e => handleFilterCreated(e)}>
+                </fieldset>
+                <fieldset>
+                <legend>Origen:</legend>
+                <select id='selectCreados' onChange={e => handleFilterCreated(e)}>
                     <option value='all'>Todos</option>
                     <option value='api'>API</option>
                     <option value='created'>Base de Datos</option>
                 </select>
+                </fieldset>
                 </Filter>
 
                 <SearchBar />
@@ -160,7 +272,7 @@ export default function Home() {
 
             <Paginated pokemonsPerPage={pokemonsPerPage} allPokemons={allPokemons.length} paginated={paginated} currentPage={currentPage} handlePrevBtn={handlePrevBtn} handleNextBtn={handleNextBtn}/>
             {
-                currentPokemons?.map(p => {
+                currentPokemons.length > 0 ? currentPokemons.map(p => {
                     return (
                     <>
                     <Link to={'/home/'+ p.id} style={{ color: 'inherit', textDecoration: 'inherit'}}>
@@ -168,7 +280,8 @@ export default function Home() {
                     </Link>
                     </>
                     )
-                })
+                }) : <img src={pikachu} style={{height:250 }} alt="loading..." />
+                
             }
         </div>
     </Body>
