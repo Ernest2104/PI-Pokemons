@@ -47,8 +47,8 @@ const Carga = styled.body`
         font-weight: bold;
         height: 24px;
         margin: 0 10px 0 0;
-        padding: 3px 7px;
-        width: 60px;
+        padding: 3px 3px;
+        width: 110px;
     }
     input[type='text'] {
         background-color: lightgray;
@@ -137,11 +137,6 @@ const validateInput = (input) => {
     else if(input.height < 0 || input.height > 20){
         errors.height = 'Rango entre 0 y 20 mts.!!'
     }
-
-    if (!input.type.length) {
-            console.log(input.type)
-        errors.type = 'Debe colocar por lo menos un tipo!!'
-    }
   
     return errors;
 }
@@ -191,7 +186,7 @@ const PokemonCreate = () => {
         if ( input.type == e.target.value) 
             alert('Ya seleccionó ese tipo...')
         
-        else if ( input.type.length < 2) {
+        else if (input.type.length < 2) {
         
         setInput({
             ...input,
@@ -202,11 +197,12 @@ const PokemonCreate = () => {
             [e.target.name]: e.target.value
         }))
         } else {
-            alert('Un Pokémon puede tener como máximo 2 tipos!!')
+            alert('2 Tipos máximo!!')
         }
     }
 
     const handleDelete = (tipo) => {
+        document.getElementById('selectTypes').value = 'Seleccione el tipo'
         setInput({
             ...input,
             type: input.type.filter(t => t !== tipo)
@@ -259,21 +255,22 @@ const PokemonCreate = () => {
                         {errors.height && <Error>{errors.height}</Error>}
                     <p><label>Imagen: </label>
                         <input type="text" value={input.sprite} name="sprite" onChange={handleChange}/></p>
-                    <p><label>Tipos: </label>
+                    <p><label>Tipos-Mínimo 1: </label>
                         <select name="types" selected='All' onChange={handleSelect} id='selectTypes'>
                             {types.map(t => (
                                 <>
-                                <option selected disabled hidden>Seleccione el tipo</option>
+                                <option value='Seleccione el tipo' selected disabled hidden>Seleccione el tipo</option>
                                 <option value={t.name} hidden={t.name === 'All' ? true : false}>{t.name}</option>
                                 </>
                             ))}
                         </select></p>
-                        {errors.type && <Error>{errors.type}</Error>}
+                        
                         {input.type.map(t => 
                             <Type>
-                                {input.type.includes(t) && t}<button type='button' onClick={() => handleDelete(t)}>x</button>
+                            {/*input.type.includes(t) && */}{t}<button type='button' onClick={() => handleDelete(t)}>x</button>
                             </Type>
                         )}
+                        
                     <button
                         type="submit"
                         disabled={

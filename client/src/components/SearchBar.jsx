@@ -32,7 +32,6 @@ const Button = styled.button`
         }
     
 `
-
 const SearchBar = () => {
 const dispatch = useDispatch();
 const [name, setName] = useState('');
@@ -44,8 +43,10 @@ const handleInputChange = (e) => {
 
 const handleSubmit = (e) => {
     e.preventDefault();
+    if (name !== ''){ 
     dispatch(getNamePokemons(name));
     setName('');
+    } else alert('debe ingresar un nombre!!')
 }
 
     return (  

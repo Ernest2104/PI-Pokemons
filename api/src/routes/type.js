@@ -17,18 +17,13 @@ router.get('/', async (req, res) => {
     res.status(200).send(allTypes);
 });
 
-// GET /types -> promises
-// router.get('/', (req, res) => {
-//     Type.findOrCreate({where: {name: 'All'}})
-//     axios.get(`https://pokeapi.co/api/v2/type`)
-//     .then(typeApi => typeApi.data.results.map(t => t.name.charAt(0).toUpperCase() + t.name.slice(1)))
-//     .then(types => types.forEach(t => {
-//         Type.findOrCreate({
-//             where: {name: t}
-//         })
-//     }))
-//     Type.findAll()
-//     .then((alltypes) => res.status(200).send(alltypes))
+// router.post('/', async (req, res) => {
+//     const { name } = req.body
+//     const newType = await Type.create({
+//         name: name
+//     }
+//     )
+//     res.status(200).send(newType)
 // })
 
 module.exports = router;

@@ -47,7 +47,8 @@ const Card = styled.div`
         display: table;
         //justify-content: space-between;
         //align-content: space-between;
-        //padding: 2px;
+        padding: 2px;
+        margin: 7px;
         font-size: 20px;
     }
     h4 {
@@ -60,6 +61,7 @@ const Card = styled.div`
     }
 `
 const Button = styled.button`
+    margin-top: 0px;
     font-family: 'Roboto Mono', monospace;
     font-size: 16px;
     border-radius: 5px;
@@ -73,7 +75,6 @@ const Button = styled.button`
     }
 `
 const PokemonDetail = () => {
-    //console.log(props)
     const dispatch = useDispatch();
     const { id } = useParams();
     

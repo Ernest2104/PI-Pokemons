@@ -15,9 +15,6 @@ const Body = styled.body`
     background: linear-gradient(to right, #FDC830, #F37335);
     min-height: 96vh;
     font-family:'Roboto Mono', monospace;
-
-    //font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    
 `
 const Menu = styled.div`
     height: 200px;
@@ -25,7 +22,6 @@ const Menu = styled.div`
     position: sticky;
     top: 0;
     border: 2px solid whitesmoke;
-
     img {
         width: 350px;
         margin-top: 10px;
@@ -51,7 +47,6 @@ const MenuCrear = styled.div`
         height: 40px;
         font-size: 16px;
         border-radius: 5px;
-        
         color:black;
         padding:12px 20px;
         background-color:lightgray;
@@ -60,7 +55,6 @@ const MenuCrear = styled.div`
         :hover {
             background-color:grey;
         }
-
     }
 `
 const Order = styled.div`
@@ -129,14 +123,13 @@ export default function Home() {
     const dispatch = useDispatch();
     const allPokemons = useSelector(state => state.pokemons);
     const allTypes = useSelector(state => state.types);
-    const message = useSelector(state => state.message);
     const [orden, setOrden] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [pokemonsPerPage, setPokemonsPerPage] = useState(12);
     const indexOfLastPokemon = currentPage * pokemonsPerPage // 12
     const indexOfFirstPokemon = indexOfLastPokemon - pokemonsPerPage // 0
     const currentPokemons = allPokemons.slice(indexOfFirstPokemon, indexOfLastPokemon);
-
+    
     const paginated = (pageNumber) => {
         setCurrentPage(pageNumber)
     }
@@ -162,7 +155,7 @@ export default function Home() {
         if (currentPage !== 1)
         setCurrentPage(currentPage - 1)
     }
-    //console.log(allPokemons)
+    
     const handleNextBtn = () => {
         if (currentPage !== Math.ceil(allPokemons.length / pokemonsPerPage)) {
             setCurrentPage(currentPage + 1)
@@ -172,22 +165,11 @@ export default function Home() {
     const handleFilterType = (e) => {
         e.preventDefault();
         dispatch(filterPokemonsByType(e.target.value))
-        
-        console.log(message)
-        // if (message === false) {
-        document.getElementById('selectTipos').value = 'All'
-        // }
-        return message;
     }
 
     const handleFilterCreated = (e) => {
         e.preventDefault();
         dispatch(filterCreated(e.target.value))
-        console.log(message)
-        if (message !== undefined) {
-            document.getElementById('selectCreados').value = 'all'
-        }
-        return message;
     }
 
     const resetFilters = () => {
@@ -204,7 +186,6 @@ export default function Home() {
         dispatch(order(e.target.value));
         setCurrentPage(1);
         setOrden(`Ordenado ${e.target.value}`);
-        
     }
 
     return (

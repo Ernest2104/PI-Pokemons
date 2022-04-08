@@ -5,7 +5,7 @@ const initialState = {
     allPokemons: [],
     types: [],
     detail: [],
-    message: {}
+    message: ''
 }
 
 const rootReducer = (state = initialState, action) => {
@@ -60,18 +60,15 @@ const rootReducer = (state = initialState, action) => {
 
         case FILTER_BY_TYPE:
             const allPokemons = state.allPokemons;
-            //let typeFiltered = []
-            // console.log(allPokemons)
-            // console.log(action.payload)
             const typeFiltered = action.payload === 'All' ? state.allPokemons : allPokemons.filter(p => typeof p.types[0] !== 'object' ? p.types.includes(action.payload) : p.types.some(t => t.name.includes(action.payload)));
-            //typeFiltered = action.payload === 'All' ? state.allPokemons : allPokemons.filter(p => p.types && p.types.includes(action.payload));
-            // console.log(typeFiltered)
-            // console.log(typeFiltered.length)
+            const returnMessageType = () => {
+                document.getElementById('selectTipos').value = 'All';
+                alert('No existes pokemomes de ese tipo!!');
+            }
             return {
                 ...state,
-                message: !(typeFiltered.length > 0) && alert('No existes pokemomes de ese tipo!!'),
+                message: typeFiltered.length === 0 && returnMessageType(),
                 pokemons: typeFiltered.length > 0 ? typeFiltered : state.allPokemons,
-                
             }
 
         case FILTER_CREATED:
@@ -82,11 +79,15 @@ const rootReducer = (state = initialState, action) => {
             } else if (action.payload === 'created') {
                 createdFiltered = allPokemons2.filter(p => p.createInDb)
             } else createdFiltered = allPokemons2.filter(p => !p.createInDb)
-            //console.log(createdFiltered)
             
+            const returnMessageCreated = () => {
+                document.getElementById('selectCreados').value = 'all';
+                alert('No existes pokemomes en la base de datos!!!');
+            }
+
             return {
                 ...state,
-                message: !(createdFiltered.length > 0) && alert('No existes pokemomes en la base de datos!!!'),
+                message: createdFiltered.length === 0 && returnMessageCreated(),
                 pokemons: createdFiltered.length > 0 ? createdFiltered : state.allPokemons
             }
 

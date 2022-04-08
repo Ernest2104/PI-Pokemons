@@ -6,16 +6,14 @@ const Body = styled.body`
     margin: 5px 15px;
     padding: 0px;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    //float: left;
     display: inline-block;
-    
 `    
 const CardContainer = styled.div`
     background: linear-gradient(to right, #fad61f, #fad61f);
     width: 250px;
-    height: auto;
+    height: 300px;
     margin: 5px;
-    padding: 10px;
+    padding: 7px;
     border-radius: 10px;
     box-shadow: 0px 0px 10px black;
 `
@@ -26,6 +24,7 @@ const Content = styled.div`
     border-bottom-left-radius: 10px;
     h1 {
         text-align: center;
+        margin:0px;
         font-style:italic;
         font-size: 26px;
         font-weight: lighter;
@@ -36,6 +35,7 @@ const Content = styled.div`
         font-weight: lighter;
         letter-spacing: 1px;
         text-align: left;
+        margin: 0px;
     }
     p{
         width: auto;
@@ -45,6 +45,7 @@ const Content = styled.div`
         border-radius: 5px;
         text-align: center;
         top: 10px;
+        margin: 10px;
     }
 `
 const Background = styled.div`
