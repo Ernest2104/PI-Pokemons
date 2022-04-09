@@ -13,7 +13,7 @@ export const CLEAN_TYPES_POKEMON = 'CLEAN_TYPES_POKEMON';
 export const getPokemons = () => {
     return async (dispatch) => {
         //const pokemons = await axios.get('http://localhost:3001/pokemons');
-        const pokemons = await axios.get('/pokemons/');
+        const pokemons = await axios.get('/pokemons');
         return dispatch({
             type: 'GET_POKEMONS',
             payload: pokemons.data
@@ -30,7 +30,7 @@ export const cleanPokemons = () => {
 export const getTypes = () => {
     return async (dispatch) => {
         //const types = await axios.get('http://localhost:3001/types');
-        const types = await axios.get('/types/');
+        const types = await axios.get('/types');
         return dispatch({
             type: 'GET_TYPES',
             payload: types.data
