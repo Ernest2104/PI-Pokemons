@@ -2,9 +2,7 @@ require('dotenv').config();
 const { Sequelize } = require('sequelize');
 const fs = require('fs');// para poder interactuar con los archivos del sistema
 const path = require('path');
-const {
-  DB_USER, DB_PASSWORD, DB_HOST, DB_NAME,
-} = process.env;
+const { DB_USER, DB_PASSWORD, DB_HOST, DB_NAME } = process.env;
 let sequelize = process.env.NODE_ENV === 'production' ?
 new Sequelize({
   database: DB_NAME,
@@ -15,7 +13,7 @@ new Sequelize({
   pool: {
     max: 3,
     min: 1,
-    idle: 1000
+    idle: 10000
   },
   dialectOptions: {
     ssl: {
