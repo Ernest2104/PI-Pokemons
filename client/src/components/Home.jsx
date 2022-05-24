@@ -207,7 +207,7 @@ export default function Home() {
                     title: 'Tu Pokémon fue borrado.',
                     showConfirmButton: false,
                     background: 'linear-gradient(to right, #FDC830, #F37335)',
-                    timer: 1500,
+                    timer: 2500,
                 },
                     dispatch(deletePokemon(id)),
                     dispatch(getPokemons())
