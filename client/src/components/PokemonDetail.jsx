@@ -83,9 +83,10 @@ const PokemonDetail = () => {
         return () => {
             dispatch(cleanDetailPokemon());
         }
-    }, [dispatch,id])
+    }, [dispatch, id])
 
     const myPokemon = useSelector(state => state.detail);
+    console.log(myPokemon.length > 0 && myPokemon[0].name)
 
     return (
         <>

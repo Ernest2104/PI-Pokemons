@@ -1,8 +1,9 @@
 import React from "react";
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getPokemons, getTypes, filterPokemonsByType, filterCreated, order, cleanPokemons } from '../actions';
-import { Link } from 'react-router-dom';
+import { getPokemons, getTypes, filterPokemonsByType, filterCreated, order, cleanPokemons, deletePokemon } from '../actions';
+import { Link, useHistory } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import styled from "styled-components";
 import Card from "./Card";
 import Paginated from "./Paginated";
@@ -121,6 +122,8 @@ const Filter = styled.div`
 `
 export default function Home() {
     const dispatch = useDispatch();
+    const history = useHistory();
+    // const { id } = useParams();
     const allPokemons = useSelector(state => state.pokemons);
     const allTypes = useSelector(state => state.types);
     const [orden, setOrden] = useState('');
@@ -135,14 +138,11 @@ export default function Home() {
     }
 
     useEffect(() => {
-        dispatch(getPokemons())
+        dispatch(getPokemons());
+        dispatch(getTypes());
         return () => {
             dispatch(cleanPokemons())
         }
-    }, [dispatch])
-
-    useEffect(() => {
-        dispatch(getTypes())
     }, [dispatch])
 
     const handleClick = (e) => {
@@ -186,6 +186,58 @@ export default function Home() {
         dispatch(order(e.target.value));
         setCurrentPage(1);
         setOrden(`Ordenado ${e.target.value}`);
+    }
+    
+    const handleDelete = (id) => {
+        Swal.fire({
+            title: 'Estás seguro?',
+            text: "El pokémon será borrado permanentemente!",
+            icon: 'warning',
+            showCancelButton: true,
+            background: 'linear-gradient(to right, #FDC830, #F37335)',
+            cancelButtonText: 'Cancelar!',
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, borralo!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Tu Pokémon fue borrado.',
+                    showConfirmButton: false,
+                    background: 'linear-gradient(to right, #FDC830, #F37335)',
+                    timer: 1500,
+                },
+                    dispatch(deletePokemon(id)),
+                    dispatch(getPokemons())
+                )
+            }
+        })
+    }
+
+    const handleUpdate = async (id) => {
+        Swal.fire({
+            title: 'Está seguro que quiere modificar este pokémon?',
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: 'Si',
+            denyButtonText: `No`,
+            background: 'linear-gradient(to right, #FDC830, #F37335)'
+          }).then((result) => {
+            if (result.isConfirmed) {
+                history.push('/pokemon/update/' + id)
+            } else if (result.isDenied) {
+              Swal.fire({
+                position: 'center',
+                icon: 'info',
+                title: 'No se hicieron modificaciones.',
+                showConfirmButton: false,
+                background: 'linear-gradient(to right, #FDC830, #F37335)',
+                timer: 1500,
+            })
+            }
+          })
     }
 
     return (
@@ -256,13 +308,20 @@ export default function Home() {
                 currentPokemons.length > 0 ? currentPokemons.map(p => {
                     return (
                     <>
-                    <Link to={'/home/'+ p.id} style={{ color: 'inherit', textDecoration: 'inherit'}}>
-                        <Card attack={p.attack} sprite={p.sprite} name={p.name} type={typeof p.types[0] === 'object' ? p.types.map(t => t.name + ' ') : p.types.map(t => t + ' ')} key={p.id}></Card>
-                    </Link>
+                        <Card 
+                            id={p.id}
+                            attack={p.attack}
+                            sprite={p.sprite}
+                            name={p.name} 
+                            type={typeof p.types[0] === 'object' ? p.types.map(t => t.name + ' ') : p.types.map(t => t + ' ')} 
+                            createInDb={p.createInDb}
+                            key={p.id}>
+                        </Card>
+                        <button onClick={() => handleUpdate(p.id)} hidden={p.createInDb ? false : true}>✅</button>
+                        <button onClick={() => handleDelete(p.id)} hidden={p.createInDb ? false : true}>🗑️</button>
                     </>
                     )
                 }) : <img src={pikachu} style={{height:250 }} alt="loading..." />
-                
             }
         </div>
     </Body>

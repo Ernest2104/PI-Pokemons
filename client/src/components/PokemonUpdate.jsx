@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {Link} from 'react-router-dom';
-import {getTypes, postPokemon, getPokemons} from '../actions/index.js'
+import {Link, useParams, useHistory} from 'react-router-dom';
+import {getTypes, getPokemons, updatePokemon, getDetailPokemon, cleanDetailPokemon} from '../actions/index.js'
 import Swal from 'sweetalert2'
 import styled from "styled-components";
 import deco from '../../src/pokemon-transparent.png'
@@ -39,7 +39,7 @@ const Carga = styled.body`
     top:150px;
     right: 550px;
     height: auto;
-    width: 350px;
+    width: 400px;
     label {
         //background: none repeat scroll 0 0 #F3F3F3;
         display: block;
@@ -105,7 +105,6 @@ const Type = styled.li`
         background-color: red;
     }
 `
-
 const validateInput = (input) => {
     let errors = {};
     if (!input.name) {
@@ -138,26 +137,38 @@ const validateInput = (input) => {
     else if(input.height < 0 || input.height > 20){
         errors.height = 'Rango entre 0 y 20 mts.!!'
     }
-  
     return errors;
 }
 
-const PokemonCreate = () => {
+const PokemonUpdate = () => {
     const dispatch = useDispatch();
+    const {id} = useParams();
+    const history = useHistory();
+    const myPokemon = useSelector(state => state.detail)
     const allPokemons = useSelector(state => state.pokemons);
     const types = useSelector(state => state.types);
     const [errors, setErrors] = useState({});
+    
     const [input, setInput] = useState({
-        name:"",
-        hp:"",
-        attack:"",
-        defense:"",
-        speed:"",
-        weight:"",
-        height:"",
-        sprite:"", 
+        name: myPokemon[0] && myPokemon[0].name,
+        hp: myPokemon[0] && myPokemon[0].hp,
+        attack: myPokemon[0] && myPokemon[0].attack,
+        defense: myPokemon[0] && myPokemon[0].defense,
+        speed: myPokemon[0] && myPokemon[0].speed,
+        weight: myPokemon[0] && myPokemon[0].weight,
+        height: myPokemon[0] && myPokemon[0].height,
+        sprite: myPokemon[0] && myPokemon[0].sprite, 
         type: []
+        // myPokemon[0] && myPokemon[0].types.map(t => t.name)
     })
+
+
+    useEffect(() => {
+        dispatch(getDetailPokemon(id))
+        return () => {
+            dispatch(cleanDetailPokemon())
+        }
+    },[dispatch, id])
 
     useEffect(() => {
         dispatch(getPokemons())
@@ -183,7 +194,9 @@ const PokemonCreate = () => {
     const handleSelect = (e) => {
         if ( input.type == e.target.value) 
             alert('Ya seleccionó ese tipo...')
+        
         else if (input.type.length < 2) {
+        
         setInput({
             ...input,
             type: [...input.type, e.target.value]
@@ -210,11 +223,11 @@ const PokemonCreate = () => {
         if (input.sprite === "") {
             input.sprite = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Pokebola-pokeball-png-0.png/601px-Pokebola-pokeball-png-0.png"
         }
-        dispatch(postPokemon(input));
+        dispatch(updatePokemon(id, input));
         Swal.fire({
             position: 'center',
             icon: 'success',
-            title: 'Pokemon creado con exito!',
+            title: 'Pokemon modificado con exito!',
             showConfirmButton: false,
             background: 'linear-gradient(to right, #FDC830, #F37335)',
             timer: 1500
@@ -230,34 +243,35 @@ const PokemonCreate = () => {
             sprite:"", 
             type: []
         })
+        history.push('/home')
     }
 
     return (  
         <Body>
-            <h1>Crea tu Pokemon!</h1>
+            <h1>Modifica tu Pokemon!</h1>
             <form onSubmit={(e) => handleSubmit(e)}>
                 <Imagen src={deco} alt='img' />
                 <Carga>
                     <p><label>Nombre: </label>
-                        <input type="text" value={input.name} name="name" onChange={handleChange} id="inputName" autoFocus/></p>
+                        <input type="text" value={input.name} name="name" onChange={handleChange} id="inputName" autoFocus/><b><i> {`[${myPokemon[0] !== undefined ? myPokemon[0].name : ""}]`}</i></b></p>
                         {errors.name && <Error>{errors.name}</Error>}
                     <p><label>Vida: </label>
-                        <input type="range" min="0" max="255" step="10" value={input.hp} name="hp" onChange={handleChange}/>{input.hp}</p>
+                        <input type="range" min="0" max="255" step="10" value={input.hp} name="hp" onChange={handleChange}/>{input.hp}<b><i> {`[${myPokemon[0] !== undefined ? myPokemon[0].hp : ""}]`}</i></b></p>
                         {errors.hp && <Error>{errors.hp}</Error>}
                     <p><label>Fuerza: </label>
-                        <input type="range" min="0" max="255" step="10" value={input.attack} name="attack" onChange={handleChange}/>{input.attack}</p>
+                        <input type="range" min="0" max="255" step="10" value={input.attack} name="attack" onChange={handleChange}/>{input.attack}<b><i> {`[${myPokemon[0] !== undefined ? myPokemon[0].attack : ""}]`}</i></b></p>
                     <p><label>Defenza: </label>
-                        <input type="range" min="0" max="255" step="10" value={input.defense} name="defense" onChange={handleChange}/>{input.defense}</p>
+                        <input type="range" min="0" max="255" step="10" value={input.defense} name="defense" onChange={handleChange}/>{input.defense}<b><i> {`[${myPokemon[0] !== undefined ? myPokemon[0].defense : ""}]`}</i></b></p>
                     <p><label>Velocidad: </label>
-                        <input type="range" min="0" max="255" step="10" value={input.speed || 130} name="speed" onChange={handleChange}/>{input.speed}</p>
+                        <input type="range" min="0" max="255" step="10" value={input.speed} name="speed" onChange={handleChange}/>{input.speed}<b><i> {`[${myPokemon[0] !== undefined ? myPokemon[0].speed : ""}]`}</i></b></p>
                     <p><label>Peso: </label>
-                        <input type="text" value={input.weight} name="weight" onChange={handleChange}/></p>
+                        <input type="text" value={input.weight} name="weight" onChange={handleChange}/><b><i> {`[${myPokemon[0] !== undefined ? myPokemon[0].weight : ""}]`}</i></b></p>
                         {errors.weight && <Error>{errors.weight}</Error>}
                     <p><label>Altura: </label>
-                        <input type="text" value={input.height} name="height" onChange={handleChange}/></p>
+                        <input type="text" value={input.height} name="height" onChange={handleChange}/><b><i> {`[${myPokemon[0] !== undefined ? myPokemon[0].height : ""}]`}</i></b></p>
                         {errors.height && <Error>{errors.height}</Error>}
                     <p><label>Imagen: </label>
-                        <input type="text" value={input.sprite} name="sprite" onChange={handleChange}/></p>
+                        <input type="text" value={input.sprite} name="sprite" onChange={handleChange}/><p><small><i>{`[${myPokemon[0] !== undefined ? myPokemon[0].sprite : ""}]`}</i></small></p></p>
                     <p><label>Tipos-Mínimo 1: </label>
                         <select name="types" selected='All' onChange={handleSelect} id='selectTypes'>
                             {types.map(t => (
@@ -266,7 +280,7 @@ const PokemonCreate = () => {
                                 <option value={t.name} hidden={t.name === 'All' ? true : false}>{t.name}</option>
                                 </>
                             ))}
-                        </select></p>
+                        </select>{myPokemon[0] !== undefined ? myPokemon[0].types.map(t => <b><small> {t.name} </small></b>) : ""}</p>
                         
                         {input.type.map(t => 
                             <Type>
@@ -277,13 +291,14 @@ const PokemonCreate = () => {
                     <button
                         type="submit"
                         disabled={
-                            !input.name || !input.hp || !input.attack || !input.defense || !input.speed ||!input.type.length ? true : false
-                        }>Crear Pokemon!</button>
-                    <Link to='home'><button>Volver al Home</button></Link>
+                            !input.name || !input.hp || !input.attack || !input.defense || !input.type.length ? true : false
+                        }>Modificar Pokemon!
+                    </button>
+                    <Link to='/home'><button>Volver al Home</button></Link>
                 </Carga>
             </form>
         </Body>
     );
 }
  
-export default PokemonCreate; 
+export default PokemonUpdate; 

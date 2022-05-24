@@ -44,7 +44,6 @@ const getDbInfo = async () => {
         }
         })
     )
-  
 };
 
 //pokemones de la base de datos + pokemones de la API
@@ -92,13 +91,37 @@ router.post('/', async (req, res) => {
     res.status(200).send('Pokemon creado con éxito!')
 });
 
+// DELETE /pokemons -> async/await
+router.delete('/:id', async (req, res) => {
+    const { id } = req.params;
+    const pokemon = await Pokemon.findByPk(id)
+    if (pokemon !== null) {
+        await pokemon.destroy()
+        res.status(200).send('Pokemon eliminado')
+    } else res.status(404).send('Pokemon no encontrado')
+});
+
+// UPDATE /pokemons -> async/await
+router.put('/update/:id', async (req, res) => {
+    const { id } = req.params;
+    const pokemon = await Pokemon.findByPk(id)
+    if (pokemon !== null) {
+        await pokemon.update(req.body)
+        const typesDb = await Type.findAll({
+              where: { name: req.body.type.map(t => t) }
+        });
+        pokemon.setTypes(typesDb);
+        res.status(200).send('Pokemon modificado')
+    } else res.status(404).send('Pokemon no encontrado')
+})
+
 // GET /pokemons/{idPokemon} -> async/await
 router.get('/:id', async (req, res) => {
     const { id } = req.params;
     const pokemonTotal = await getAllPokemons();
     if (id) {
         const pokemonId = pokemonTotal.filter(p => p.id == id);
-        pokemonId.length ? res.status(200).json(pokemonId) : res.status(404).send('Pokemon no encontrado!');
+        pokemonId.length ? res.json(pokemonId) : res.status(404).send('Pokemon no encontrado!');
     }
 });
 

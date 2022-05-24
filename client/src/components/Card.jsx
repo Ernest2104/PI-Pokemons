@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 //import styles from './Card.module.css'
 import styled from 'styled-components';
 
@@ -62,18 +63,19 @@ const Background = styled.div`
         transform: scale(1.1);
     }
 `
-export default function Card({ attack, sprite, name, type }) {
+export default function Card({ id, attack, sprite, name, type, createInDb }) {
     return (
         <Body>
             <CardContainer>
                 <Background>
-                    <img src={sprite} alt="img not found"/>
+                    <Link to={'/home/'+ id}><img src={sprite} alt="img not found"/></Link>
                 </Background>
                 <Content>
                     <h1>{name}</h1>
                     <h3>Strength: {attack}</h3>
                     <p>{type}</p>
                 </Content>
+                {/* <button onClick={handleDelete} hidden={createInDb ? false : true}>x</button> */}
             </CardContainer>
         </Body>
     )

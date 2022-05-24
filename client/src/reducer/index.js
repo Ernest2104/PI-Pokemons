@@ -1,4 +1,8 @@
-import {GET_POKEMONS, ORDER, FILTER_BY_TYPE, CLEAN_DETAIL_POKEMON, FILTER_CREATED, GET_DETAIL_POKEMON, GET_NAME_POKEMONS, GET_TYPES, CLEAN_POKEMONS, CLEAN_TYPES_POKEMON} from '../actions/index'
+import {
+        GET_POKEMONS, ORDER, FILTER_BY_TYPE, CLEAN_DETAIL_POKEMON, FILTER_CREATED, 
+        GET_DETAIL_POKEMON, GET_NAME_POKEMONS, GET_TYPES, CLEAN_POKEMONS, 
+        CLEAN_TYPES_POKEMON, DELETE_POKEMON, UPDATE_POKEMON
+       } from '../actions/index'
 
 const initialState = {
     pokemons: [],
@@ -39,6 +43,16 @@ const rootReducer = (state = initialState, action) => {
             return {
                 ...state,
                 pokemons: action.payload
+            }
+        
+        case DELETE_POKEMON:
+            return {
+                ...state
+            }
+
+        case UPDATE_POKEMON:
+            return {
+                ...state
             }
 
         case GET_DETAIL_POKEMON:

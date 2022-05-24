@@ -9,6 +9,8 @@ export const FILTER_CREATED = 'FILTER_CREATED';
 export const ORDER = 'ORDER';
 export const CLEAN_POKEMONS = 'CLEAN_POKEMONS';
 export const CLEAN_TYPES_POKEMON = 'CLEAN_TYPES_POKEMON';
+export const DELETE_POKEMON = 'DELETE_POKEMON';
+export const UPDATE_POKEMON = 'UPDATE_POKEMON';
 
 export const getPokemons = () => {
     return async (dispatch) => {
@@ -86,6 +88,36 @@ export const postPokemon = (payload) => {
         //const response = await axios.post('http://localhost:3001/pokemons', payload);
         const response = await axios.post('/pokemons', payload);
         return response;
+    }
+}
+
+export const deletePokemon = (id) => {
+    console.log(id)
+    return async (dispatch) => {
+        try {
+            const pokemon = await axios.delete('http://localhost:3001/pokemons/' + id)
+            return dispatch ({
+                type: 'DELETE_POKEMON',
+                pokemon
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+}
+
+export const updatePokemon = (id, payload) => {
+    console.log(id)
+    return async (dispatch) => {
+        try {
+            const pokemon = await axios.put('http://localhost:3001/pokemons/update/' + id, payload)
+            return dispatch ({
+                type: 'UPDATE_POKEMON',
+                pokemon
+            })
+        } catch (error) {
+            console.log(error)
+        }
     }
 }
 
