@@ -95,7 +95,8 @@ export const deletePokemon = (id) => {
     console.log(id)
     return async (dispatch) => {
         try {
-            const pokemon = await axios.delete('http://localhost:3001/pokemons/' + id)
+            // const pokemon = await axios.delete('http://localhost:3001/pokemons/' + id)
+            const pokemon = await axios.delete('/pokemons/' + id)
             return dispatch ({
                 type: 'DELETE_POKEMON',
                 pokemon
@@ -110,7 +111,8 @@ export const updatePokemon = (id, payload) => {
     console.log(id)
     return async (dispatch) => {
         try {
-            const pokemon = await axios.put('http://localhost:3001/pokemons/update/' + id, payload)
+            // const pokemon = await axios.put('http://localhost:3001/pokemons/update/' + id, payload)
+            const pokemon = await axios.put('/pokemons/update/' + id, payload)
             return dispatch ({
                 type: 'UPDATE_POKEMON',
                 pokemon
