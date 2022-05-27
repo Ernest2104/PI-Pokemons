@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {Link} from 'react-router-dom';
-import {getTypes, postPokemon, getPokemons} from '../actions/index.js'
+import {getTypes, postPokemon, getPokemons, postType} from '../actions/index.js'
 import Swal from 'sweetalert2'
 import styled from "styled-components";
 import deco from '../../src/pokemon-transparent.png'
@@ -39,7 +39,7 @@ const Carga = styled.body`
     top:150px;
     right: 550px;
     height: auto;
-    width: 350px;
+    width: 450px;
     label {
         //background: none repeat scroll 0 0 #F3F3F3;
         display: block;
@@ -80,7 +80,7 @@ const Carga = styled.body`
         padding: 4px;
         width: 180px;
     }
-    button {
+    /* button {
         padding: 0.5em 1em;
         border-radius: 5px;
         background: lightgrey;
@@ -91,7 +91,7 @@ const Carga = styled.body`
         :hover {
         background-color:grey;
         }
-    }
+    } */
 `
 const Type = styled.li`
     text-align: center;
@@ -105,38 +105,54 @@ const Type = styled.li`
         background-color: red;
     }
 `
+const Buttons = styled.div`
+    border: 1px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* text-align: center; */
+    /* margin-left: auto;
+    margin-right: auto; */
+    /* margin: 0 10px;
+    position: static; */
+    /* align-content:center; */
+    button {
+        text-align: center;
+        width: 100px;
+    }
+`
 
 const validateInput = (input) => {
     let errors = {};
     if (!input.name) {
-        errors.name = 'Se requiere nombre!!';
+        errors.name = '¡Se requiere nombre!';
     } 
     else if (/^([0-9])*$/.test(input.name)){
-        errors.name = 'Solo caracteres!!'
+        errors.name = '¡Solo caracteres!'
     }
     
     if (!input.hp) {
-        errors.hp = 'Se debe ingresar vida!!'
+        errors.hp = '¡Se debe ingresar vida!'
     }
     
     if (!input.weight) {
-        errors.weight = 'Se debe ingresar el peso!!'
+        errors.weight = '¡Se debe ingresar el peso!'
     }
     else if (!/^[0-9]+([.])?([0-9]+)?$/.test(input.weight)){
-        errors.weight = 'Solo números!!'
+        errors.weight = '¡Solo números!'
     }
     else if(input.weight < 0 || input.weight > 100){
-        errors.weight = 'Rango entre 0 y 100 kgs.!!'
+        errors.weight = '¡Rango entre 0 y 100 kgs.!'
     }
 
     if (!input.height) {
-        errors.height = 'Se debe ingresar la altura!!'
+        errors.height = '¡Se debe ingresar la altura!'
     }
     else if (!/^[0-9]+([.])?([0-9]+)?$/.test(input.height)){
-        errors.height = 'Solo números!!'
+        errors.height = '¡Solo números!'
     }
     else if(input.height < 0 || input.height > 20){
-        errors.height = 'Rango entre 0 y 20 mts.!!'
+        errors.height = '¡Rango entre 0 y 20 mts.!'
     }
   
     return errors;
@@ -146,7 +162,11 @@ const PokemonCreate = () => {
     const dispatch = useDispatch();
     const allPokemons = useSelector(state => state.pokemons);
     const types = useSelector(state => state.types);
+    const [show, setShow] = useState(true)
     const [errors, setErrors] = useState({});
+    const [inputType, setInputType] = useState({
+        name:""
+    })
     const [input, setInput] = useState({
         name:"",
         hp:"",
@@ -165,8 +185,13 @@ const PokemonCreate = () => {
     },[dispatch])
 
     const handleChange = (e) => {
-        if (allPokemons.filter(p => p.name === input.name).length) {
-            alert('Ya existe ese nombre')
+        if (allPokemons.filter(p => p.name === input.name.trim()).length) {
+            Swal.fire({
+                position: 'center',
+                icon: 'info',
+                title: '¡Ya existe ese Pokémon!',
+                background: 'linear-gradient(to right, #FDC830, #F37335)',
+            })
             setInput(input.name="")
             document.getElementById('inputName').focus()
         }
@@ -182,7 +207,12 @@ const PokemonCreate = () => {
 
     const handleSelect = (e) => {
         if ( input.type == e.target.value) 
-            alert('Ya seleccionó ese tipo...')
+        Swal.fire({
+            position: 'center',
+            icon: 'info',
+            title: '¡Ya seleccionó ese tipo!',
+            background: 'linear-gradient(to right, #FDC830, #F37335)',
+        })
         else if (input.type.length < 2) {
         setInput({
             ...input,
@@ -193,7 +223,12 @@ const PokemonCreate = () => {
             [e.target.name]: e.target.value
         }))
         } else {
-            alert('2 Tipos máximo!!')
+            Swal.fire({
+                position: 'center',
+                icon: 'info',
+                title: '¡Dos tipos máximo!',
+                background: 'linear-gradient(to right, #FDC830, #F37335)',
+            })
         }
     }
 
@@ -203,6 +238,47 @@ const PokemonCreate = () => {
             ...input,
             type: input.type.filter(t => t !== tipo)
         })
+    }
+
+    const handleShow = (e) => {
+        e.preventDefault();
+        setShow(!show)
+    }
+
+    const handleTypeChange = (e) => {
+        console.log(e.target.value)
+        setInputType({
+            name: e.target.value})
+    }
+
+    const handleSubmitType = (e) => {
+        // e.preventDefault();
+        if (types.filter(t => t.name === inputType.name.trim().toLowerCase()).length) {
+            Swal.fire({
+                position: 'center',
+                icon: 'info',
+                title: '¡Ya existe ese tipo!',
+                background: 'linear-gradient(to right, #FDC830, #F37335)',
+            })
+            document.getElementById('typeName').focus()
+            // setInputType(inputType.typeName="")
+            
+        } else {
+        dispatch(postType(inputType))
+        Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: '!Tipo creado!',
+            showConfirmButton:false,
+            background: 'linear-gradient(to right, #FDC830, #F37335)',
+            timer:1500
+        })
+        dispatch(getTypes())
+        setInputType({
+            name:""
+        })
+        setShow(!show)
+    }
     }
 
     const handleSubmit = (e) => {
@@ -266,20 +342,25 @@ const PokemonCreate = () => {
                                 <option value={t.name} hidden={t.name === 'All' ? true : false}>{t.name}</option>
                                 </>
                             ))}
-                        </select></p>
+                        </select>
+                        <button type='button' onClick={handleShow}>Nuevo Tipo!</button>
+                        <p><input type='text' value={inputType.name} name='typeName' id='typeName' onChange={handleTypeChange} hidden={show}></input>
+                        <button type='button' hidden={show} onClick={handleSubmitType} disabled={inputType.name === ''}>Guardar Tipo</button></p>
+                    </p>
                         
                         {input.type.map(t => 
                             <Type>
                             {/*input.type.includes(t) && */}{t}<button type='button' onClick={() => handleDelete(t)}>x</button>
                             </Type>
                         )}
-                        
-                    <button
-                        type="submit"
-                        disabled={
-                            !input.name || !input.hp || !input.attack || !input.defense || !input.speed ||!input.type.length ? true : false
-                        }>Crear Pokemon!</button>
-                    <Link to='home'><button>Volver al Home</button></Link>
+                    <Buttons>    
+                        <button
+                            type="submit"
+                            disabled={
+                                !input.name || !input.hp || !input.attack || !input.defense || !input.speed ||!input.type.length ? true : false
+                            }>Crear Pokemon!</button>
+                        <Link to='home'><button>Volver al Home</button></Link>
+                    </Buttons>
                 </Carga>
             </form>
         </Body>

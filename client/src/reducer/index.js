@@ -54,6 +54,11 @@ const rootReducer = (state = initialState, action) => {
             return {
                 ...state
             }
+        
+        case 'POST_TYPE':
+            return {
+                ...state
+            }
 
         case GET_DETAIL_POKEMON:
             return {

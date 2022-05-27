@@ -123,6 +123,15 @@ export const updatePokemon = (id, payload) => {
     }
 }
 
+export const postType = (payload) => {
+    console.log(payload)
+    return async () => {
+        const response = await axios.post('http://localhost:3001/types', payload);
+        // const response = await axios.post('/pokemons', payload);
+        return response;
+    }
+}
+
 export const filterPokemonsByType = (payload) => {
     return {
         type: 'FILTER_BY_TYPE',
