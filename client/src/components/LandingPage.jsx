@@ -5,16 +5,17 @@ import fondo from '../background_landing.png'
 import logo from '../pngwing.com.png'
 
 const Body = styled.body`
-    background: url(${fondo});
-    /* background-size: calc(1.5rem + 2vw); */
+
+    background: url(${fondo}) no-repeat center top;
     height: 94vh;
-    background-position: center;
+    width: 97.5vw;
+    margin: 0;
+    padding: 0;
     border-width:1rem;
     border-style: solid;
     border-color:orange;
     border-radius: 1rem;
-    overflow: hidden;
-
+    
     h1 {
         color: black; 
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
@@ -25,12 +26,12 @@ const Body = styled.body`
         margin-top: 0;
         padding-top: 2%;
         position: relative;
-        top: 10%;
+        top: 7%;
     }
 `
 const Buttons = styled.div`
     position: relative;
-    top: 15%;
+    top: 17%;
 
     button {
         padding: 1.3em 3em;

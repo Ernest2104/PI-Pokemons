@@ -3,21 +3,22 @@ import styled from "styled-components";
 
 const Nav = styled.nav`
     text-align: right;
-    margin-right: 100px;
+    margin-right: 6rem;
 `
 const Paginado = styled.ul`
     display: inline-block;
     padding: 0;
-    margin: 5px;
+    margin: 0.4rem;
     cursor: pointer;
-    font-weight: lighter;
+    font-weight: bold;
+    font-size: calc(0.4rem + 0.4vw);
     li {
         display:inline-block;
-	    margin-right:8px;
+	    margin-right:0.7rem;
         a {
             display:block;
             border: 1px solid black;
-	        padding:5px 15px;
+	        padding:0.4rem 0.9rem;
 	        color:black;
 	        background: antiquewhite;
 	        text-decoration: none;

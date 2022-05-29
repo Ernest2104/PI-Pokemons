@@ -4,35 +4,35 @@ import { Link } from "react-router-dom";
 import styled from 'styled-components';
 
 const Body = styled.body`
-    margin: 5px 15px;
+    margin: 0.1rem 1rem;
     padding: 0px;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     display: inline-block;
 `    
 const CardContainer = styled.div`
     background: linear-gradient(to right, #fad61f, #fad61f);
-    width: 250px;
-    height: 300px;
-    margin: 5px;
-    padding: 7px;
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px black;
+    width: 15rem;
+    height: 17.5rem;
+    margin: 0.4rem;
+    padding: 0.6rem;
+    border-radius: 0.5rem;
+    box-shadow: 0px 0px 15px black;
 `
 const Content = styled.div`
     background: linear-gradient(to right, #f5e593, #fff2af);
-    padding: 10px;
+    padding: 0.3rem;
     border-bottom-right-radius: 10px;
     border-bottom-left-radius: 10px;
     h1 {
         text-align: center;
         margin:0px;
         font-style:italic;
-        font-size: 26px;
+        font-size: calc(0.8rem + 0.8vw);
         font-weight: lighter;
-        padding: 5px;
+        padding: 0.2rem;
     }
     h3 {
-        font-size: 14px;
+        font-size: calc(0.4rem + 0.4vw);
         font-weight: lighter;
         letter-spacing: 1px;
         text-align: left;
@@ -41,23 +41,23 @@ const Content = styled.div`
     p{
         width: auto;
         background-color: black;
-        padding: 7px;
+        padding: 0.5rem;
         color: white;
-        border-radius: 5px;
+        border-radius: 0.4rem;
         text-align: center;
-        top: 10px;
-        margin: 10px;
+        top: 10%;
+        margin: 4%;
     }
 `
 const Background = styled.div`
     text-align: center;
     background: linear-gradient(to right,#b09711,#504921);
-    border-top-right-radius: 10px;
-    border-top-left-radius: 10px;
+    border-top-right-radius: 1rem;
+    border-top-left-radius: 1rem;
 
     img{
-        width: 170px;
-        height: 170px;
+        width: 10rem;
+        height: 10rem;
     }
     img:hover {
         transform: scale(1.1);

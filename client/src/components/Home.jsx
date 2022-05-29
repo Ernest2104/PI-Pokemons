@@ -18,38 +18,31 @@ const Body = styled.body`
     font-family:'Roboto Mono', monospace;
 `
 const Menu = styled.div`
-    height: 200px;
+    /* border: 1px solid red; */
+    height: 12rem;
     background-image: url(${fondo});
-    position: sticky;
-    top: 0;
-    border: 2px solid whitesmoke;
     img {
-        width: 350px;
-        margin-top: 10px;
+        width: calc(10rem + 10vw);
         margin-left: auto;
         margin-right: auto;
-        
-        display: block;
     }
 `
 const MenuCrear = styled.div`
-    position: fixed;
-    top: 15px; 
-    right: 60px;
-    height: 185px;
-    width: 220px;
+    position: absolute;
+    display: block;
+    right: 2%;
+    height: 11rem;
+    width: 12rem;
     font-family: Arial, Helvetica, sans-serif;
-    border: 3px outset lightgray;
-    border-radius: 10px;
-    display: inline;
+    border: 0.3rem outset lightgray;
     button {
-        margin: 10px;
-        width: 180px;
-        height: 40px;
-        font-size: 16px;
-        border-radius: 5px;
+        margin: 0.65rem;
+        width: 10rem;
+        height: 2.5rem;
+        font-size: calc(0.4rem + 0.4vw);
+        border-radius: 0.5rem;
         color:black;
-        padding:12px 20px;
+        padding:0.5rem 0.5rem;
         background-color:lightgray;
         display:inline-block;
         cursor: pointer;
@@ -58,66 +51,73 @@ const MenuCrear = styled.div`
         }
     }
 `
+const OrderFilter = styled.div`
+    top: 2%;
+    left: 1.5%;
+
+    position: absolute;
+    display: inline;
+    width: 15%;
+`
 const Order = styled.div`
     font-family: Arial, Helvetica, sans-serif;
     font-style: italic;
-    //border: 3px outset lightgray;
-    position: fixed;
-    top: 50px; 
-    left: 310px;
-    height: 190px;
-    width: 280px;
+    /* border: 1px solid black; */
+    position: absolute;
+    height: auto;
+    width: 17rem;
     p {
-        font-size: 17px;
+        font-size: calc(2rem + 2vw);
     }
     input {
-        //padding: 10px;
-        margin-left: 20px;
+        margin-left: 5%;
     }
 
     fieldset {
-        font-size: 14px;
+        font-size: calc(0.4rem + 0.4vw);
         font-style: normal;
-        border-radius: 5px;
+        border-radius: 0.5rem;
         border-color: lightgoldenrodyellow;
-        margin: 10px;
+        margin: 0.1rem;
     }
     legend {
-        font-size: 14px;
+        font-size: calc(0.4rem + 0.4vw);
         font-weight: bold;
     }
 `
 const Filter = styled.div`
+    /* border: 1px solid black; */
+    position: absolute;
+    top: 2%;
+    left: 100%;
     font-family: Arial, Helvetica, sans-serif;
     font-style: italic;
-    //border: 3px outset lightgray;
-    border-radius: 10px;
-    position: fixed;
-    top: 60px; 
-    left: 20px;
-    height: 190px;
-    width: 280px;
+    position: relative;
+    height: auto;
+    width: 17rem;
 
     p {
-        font-size: 17px;
+        font-size: calc(1rem + 1vw);
     }
     fieldset {
-        border-radius: 5px;
+        border-radius: 0.5rem;
         border-color: lightgoldenrodyellow;
+        width: 90%;
         
     }
     legend {
-        font-size: 14px;
+        font-size: calc(0.4rem + 0.4vw);
         font-style: normal;
         font-weight: bold;
     }
     select {
         background: beige;
+        font-size: calc(0.4rem + 0.4vw);
         font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
         font-weight: bold;
-        height: 29px;
+        height: 1.7rem;
         overflow: hidden;
-        width: 220px;
+        width: 90%;
     }
 `
 export default function Home() {
@@ -249,8 +249,10 @@ export default function Home() {
                     <button onClick={e => handleClick(e)}>Cargar Todos</button>
                     <button onClick={resetFilters}>Limpiar Filtros</button>
                 </MenuCrear>
-                <img src={logo} alt="img" />
                 
+                <img src={logo} alt="img" /><SearchBar />
+
+                <OrderFilter>
                 <Order>
                 {/*<p>Ordenamiento</p>*/}
                 <fieldset onChange={(e) => handleOrder(e)}>
@@ -299,8 +301,9 @@ export default function Home() {
                 </select>
                 </fieldset>
                 </Filter>
+                </OrderFilter>
 
-                <SearchBar />
+                {/* <SearchBar /> */}
             </Menu>
 
             <Paginated pokemonsPerPage={pokemonsPerPage} allPokemons={allPokemons.length} paginated={paginated} currentPage={currentPage} handlePrevBtn={handlePrevBtn} handleNextBtn={handleNextBtn}/>

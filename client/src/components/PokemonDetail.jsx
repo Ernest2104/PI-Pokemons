@@ -5,68 +5,63 @@ import { getDetailPokemon, cleanDetailPokemon } from "../actions";
 import styled from "styled-components";
 import pikachu from '../../src/pikachu2.gif'
 
+const Body = styled.body`
+    width: 100vw;
+`
 const Card = styled.div`
     height: fit-content;
     font-family: 'Roboto Mono', monospace;
-    max-width: 400px;
-    border-radius: 4px;
-    //color: #000;
-    text-align: center;
-    padding: 10px;
+    width: 30%;
+    border-radius: 3rem;
+    padding: 0.5rem;
     margin: 0 auto;
-    //background-color: #FFF;
-    //border: 1px solid black;
     
     ::before {
         content: '';
         background: radial-gradient(#ffffff, #f8b500);
-        /* background-size: 3px 3px;
-        border-radius: 4px; */
         height: 100%;
         width: 100%;
         position: absolute;
-        left: 10px;
-        top: 10px;
+        left: 1rem;
+        top: 1rem;
         z-index: -1;
     }
 
     div {
-        width: 350px;
-        margin: 10px auto;
+        display: flex;
+        justify-content: center;  
         img {
-            width: 300px;
-            border-radius: 10%;
+            width: calc(8rem + 8vw);
         }
     }
     h1 {
-        font-size: 40px;
+        font-size: calc(1.5rem + 1.5vw);
         font-style: italic;
     }
     
     h3 {
+        min-width: auto;
         display: table;
-        //justify-content: space-between;
-        //align-content: space-between;
-        padding: 2px;
-        margin: 7px;
-        font-size: 20px;
+        padding: 0.1rem;
+        margin: 0.5rem;
+        font-size: calc(0.6rem + 0.6vw);
     }
     h4 {
-        padding: 5px;
-        margin: 5px;
-        border-radius: 4px;
+        padding: 0.4rem;
+        margin: 0.4rem;
+        border-radius: 0.4rem;
         border: 1px dashed red;
-        font-size: 20px;
+        font-size: calc(0.65rem + 0.65vw);
         color: darkblue;
     }
 `
 const Button = styled.button`
-    margin-top: 0px;
+    margin-top: 0;
     font-family: 'Roboto Mono', monospace;
-    font-size: 16px;
-    border-radius: 5px;
+    font-size: calc(0.55rem + 0.55vw);
+    border-radius: 0.5rem;
     color:black;
-    padding:10px 20px;
+    padding:0.7rem 1.5rem;
     background-color:lightgrey;
     display:inline-block;
     cursor: pointer;
@@ -89,7 +84,7 @@ const PokemonDetail = () => {
     console.log(myPokemon.length > 0 && myPokemon[0].name)
 
     return (
-        <>
+        <Body>
             {    
                 myPokemon.length > 0 ?
                 <Card>
@@ -105,13 +100,17 @@ const PokemonDetail = () => {
                     <h3>Velocidad: {myPokemon[0].speed}</h3>
                     <h3>Altura: {myPokemon[0].height}</h3>
                     <h3>Peso: {myPokemon[0].weight}</h3>
-                </Card> : <img src={pikachu} style={{height:300 }} alt="loading..." />
-            }
-            <br/>
+                    <br/>
             <Link to='/home'>
                 <Button>Home</Button>
             </Link>
-        </>
+                </Card> : <img src={pikachu} style={{height:300 }} alt="loading..." />
+            }
+            {/* <br/>
+            <Link to='/home'>
+                <Button>Home</Button>
+            </Link> */}
+        </Body>
     );
 }
  
